@@ -25,23 +25,8 @@ namespace Codersphere.MovieReviews.SentimentAnalysis
                 model,
                 new SentimentData
                 {
-                    SentimentText = "It was a terrible movie, story was awful"
+                    SentimentText = "It was a brilliant movie, story was fantastic"
                 });
-
-
-            var textItemsToTest = new List<SentimentData>
-            {
-                new SentimentData
-                {
-                    SentimentText = "This was a horrible film, worst ever, waste of time"
-                },
-                new SentimentData
-                {
-                    SentimentText = "I loved every bit"
-                }
-            };
-
-            predictionService.Predict(mlContext, model, textItemsToTest);
         }
     }
 }

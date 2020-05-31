@@ -9,25 +9,18 @@ namespace Codersphere.MovieReviews.SentimentAnalysis.ML
     {
         public void Predict(MLContext mlContext, ITransformer model, SentimentData textToTest)
         {
-            var predictionFunction = mlContext.Model.CreatePredictionEngine<SentimentData, SentimentPrediction>(model);
+            var predictionEngine = mlContext.Model.CreatePredictionEngine<SentimentData, SentimentPrediction>(model);
 
-            var prediction = predictionFunction.Predict(textToTest);
+            var prediction = predictionEngine.Predict(textToTest);
             DisplayPrediction(prediction);
         }
 
-        public void Predict(MLContext mlContext, ITransformer model, IEnumerable<SentimentData> textItemsToTest)
+        private void DisplayPrediction(SentimentPrediction prediction)
         {
-
-            var batchComments = mlContext.Data.LoadFromEnumerable(textItemsToTest);
-            var predictions = model.Transform(batchComments);
-
-            var predictedResults = mlContext.Data.CreateEnumerable<SentimentPrediction>(predictions, reuseRowObject: false);
-
-
-            foreach (var prediction in predictedResults)
-            {
-                DisplayPrediction(prediction);
-            }
+            Console.WriteLine($"Text: {prediction.SentimentText}");
+            Console.WriteLine($"Prediction: {(Convert.ToBoolean(prediction.Prediction) ? "Positive" : "Negative")}");
+            Console.WriteLine($"Probability: {DisplayProbability(prediction)}");
+            Console.WriteLine("----------------------------------------------");
         }
 
         private string DisplayProbability(SentimentPrediction resultPrediction)
@@ -38,14 +31,6 @@ namespace Codersphere.MovieReviews.SentimentAnalysis.ML
             }
 
             return $"{((1-resultPrediction.Probability) * 100):#.##}%";
-        }
-
-        private void DisplayPrediction(SentimentPrediction prediction)
-        {
-            Console.WriteLine($"Text: {prediction.SentimentText}");
-            Console.WriteLine($"Prediction: {(Convert.ToBoolean(prediction.Prediction) ? "Positive" : "Negative")}");
-            Console.WriteLine($"Probability: {DisplayProbability(prediction)}");
-            Console.WriteLine("----------------------------------------------");
         }
     }
 }

@@ -32,9 +32,9 @@ namespace Codersphere.MovieReviews.SentimentAnalysis.ML
             var estimator = mlContext.Transforms.Text.FeaturizeText(
                 outputColumnName: "Features",
                 inputColumnName: nameof(SentimentData.SentimentText))
-                .Append(mlContext.BinaryClassification.Trainers.SdcaLogisticRegression(
-                    labelColumnName: "Label", 
-                    featureColumnName: "Features"));
+            .Append(mlContext.BinaryClassification.Trainers.SdcaLogisticRegression(
+                labelColumnName: "Label", 
+                featureColumnName: "Features"));
 
             var model = estimator.Fit(splitTrainSet);
 
